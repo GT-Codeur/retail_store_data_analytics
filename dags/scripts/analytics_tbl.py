@@ -12,18 +12,24 @@ def t_store_sales_summary(conn_db: connection) -> None:
         Parameter: None
         Return: None
     """
-    with conn_db.cursor() as cur:
+    try:
+        with conn_db.cursor() as cur:
 
-        cur.execute(
-            """
-                DROP TABLE IF EXISTS store_sales_summary;
-                CREATE TABLE store_sales_summary AS
-                SELECT store_id, store_name, store_country, store_city, store_type,
-                    SUM(total_amount) AS total_sales_amount,
-                    SUM(total_quantity_sold) AS total_quantity_sold
-                FROM exploded_products
-                GROUP BY store_id, store_name, store_country, store_city, store_type;
-            """
-        )
+            cur.execute(
+                """
+                    DROP TABLE IF EXISTS store_sales_summary;
+                    CREATE TABLE store_sales_summary AS
+                    SELECT store_id, store_name, store_country, store_city, store_type,
+                        SUM(total_amount) AS total_sales_amount,
+                        SUM(total_quantity_sold) AS total_quantity_sold
+                    FROM exploded_products
+                    GROUP BY store_id, store_name, store_country, store_city, store_type;
+                """
+            )
 
-        conn_db.commit()
+            conn_db.commit()
+    except Exception:
+        conn_db.rollback()
+        raise
+    finally:
+        conn_db.close()
