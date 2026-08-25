@@ -4,8 +4,7 @@ from datetime import datetime
 import psycopg2
 from dotenv import load_dotenv
 from scripts.extract_load_logic import load_to_exploded_tbl, extract_from_json
-from scripts.transform import transform_data
-from scripts.store_sales_summary import t_store_sales_summary
+from scripts.analytics_tbl import t_store_sales_summary
 from airflow import DAG
 from airflow.sdk import task, dag
 
