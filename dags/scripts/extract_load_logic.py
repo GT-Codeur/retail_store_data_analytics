@@ -32,6 +32,7 @@ def load_to_exploded_tbl(conn_db: connection, data: list[dict[str, Any]]) -> Non
     """
     try:
         with conn_db.cursor() as cur:
+            cur.execute("TRUNCATE TABLE exploded_products;")
             for row in data:
                 for product in row["products"]:
                     record = (
