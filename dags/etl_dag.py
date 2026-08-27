@@ -63,15 +63,21 @@ def etl_sport_retail_store_dag() -> None:
     def execute_payment_method_analysis() -> None:
         return payment_method_analysis(conn_db)
 
+    @task.sql(conn_id="postgresql_connection")
+    def get_5_stores_high_total_sales():
+        return """SELECT DISTINCT store_id, total_sales_amount FROM public.store_sales_summary
+ORDER BY total_sales_amount DESC LIMIT 5;"""
+
     extract_load_task = execute_extract_load_task()
     create_store_sales_summary_task = execute_store_sales_summary()
     create_daily_sales_country_currency_task = execute_daily_sales_country_currency()
     create_payment_method_analysis_task = execute_payment_method_analysis()
+    get_5_stores_high_total_sales_task = get_5_stores_high_total_sales()
 
     extract_load_task >> [
         create_store_sales_summary_task, 
         create_daily_sales_country_currency_task,
         create_payment_method_analysis_task
-    ]
+    ] >> get_5_stores_high_total_sales_task
 
 etl_sport_retail_store_dag()
