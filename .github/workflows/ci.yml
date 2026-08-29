@@ -12,7 +12,7 @@ jobs:
         with:
           python-version: 3.12.4
       - name: Install dependencies
-        run: pip install build
+        run: pip install dependencies
       - name: Install Pylint
         run: pip install pylint
       - name: Run Pylint
