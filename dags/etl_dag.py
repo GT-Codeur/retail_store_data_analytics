@@ -9,7 +9,6 @@ from scripts.analytics_tbl import (
     daily_sales_country_currency,
     payment_method_analysis
 )
-from airflow import DAG
 from airflow.sdk import task, dag
 
 load_dotenv()
@@ -75,7 +74,7 @@ ORDER BY total_sales_amount DESC LIMIT 5;"""
     get_5_stores_high_total_sales_task = get_5_stores_high_total_sales()
 
     extract_load_task >> [
-        create_store_sales_summary_task, 
+        create_store_sales_summary_task,
         create_daily_sales_country_currency_task,
         create_payment_method_analysis_task
     ] >> get_5_stores_high_total_sales_task

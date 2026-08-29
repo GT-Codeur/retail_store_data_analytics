@@ -5,7 +5,6 @@
 """
 
 from psycopg2.extensions import connection
-from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 def t_store_sales_summary(conn_db: connection) -> None:
     """
